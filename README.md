@@ -83,4 +83,30 @@ Tạo thư mục chứa website tại D:\Apache24\Apache24\phuonganhnguyet
 <img width="1920" height="1074" alt="image" src="https://github.com/user-attachments/assets/6048251c-6659-4b66-942f-5429a23f80a3" />
 
 ## 2.3. Tạo CSDL tuỳ ý trên mssql (SQL Server 2022)
-Thiết kế CSDL chứa các thông tin về sản phẩm quần áo thu đông trên hệ thống 
+Thiết kế CSDL chứa các thông tin về shop Mỹ Phẩm trên hệ thống.
+Server_name: DESKTOP-3223L00\NGUYET
+DB_name:QLShop_MyPham
+Table_name:SPMyPham
+Port 1433
+- Tạo bảng CSDL:
+
+<img width="1880" height="942" alt="image" src="https://github.com/user-attachments/assets/9349ed09-c52e-4a74-b4f0-dd7bf0d69584" />
+
+- Nhập dữ liệu demo:
+
+<img width="1920" height="667" alt="image" src="https://github.com/user-attachments/assets/75649755-b1f7-41f3-8362-6680c0f36d22" />
+
+## 2.4. Cài đặt thư viện trên Node-Red
+* Bước 1. Mở Node-Red trên trình duyệt bằng url http://localhost:1880, chọn Manage palette và mở tap Install
+* Cài các thư viện sau:
+  - node-red-contrib-mssql-plus: Kết nối SQL Server
+  - node-red-node-mysql: Kết nối MySQL 
+  - node-red-contrib-telegrambot: Gửi thông báo qua Telegram
+  - node-red-contrib-moment: Xử lí thời gian dễ dàng
+  - node-red-contrib-influxdb: Kết nối cơ sở dữ liệu InfluxDB
+  - node-red-contrib-duckdns: Cập nhật IP cho tên miền DuckDNS
+  - node-red-contrib-cron-plus: Lập lịch công việc tự động (Cron jobs)
+ 
+
+
+  
