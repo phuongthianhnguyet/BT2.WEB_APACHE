@@ -42,7 +42,8 @@ Tạo thư mục chứa website tại D:\Apache24\Apache24\phuonganhnguyet
 
 - Kết quả sau khi cài đặt và chạy:
 
-<img width="1920" height="1079" alt="image" src="https://github.com/user-attachments/assets/17732a49-9263-469d-a708-c37056e0409a" />
+<img width="1903" height="1023" alt="image" src="https://github.com/user-attachments/assets/50378e8b-b584-477e-a694-d17c1e20d283" />
+
 
 ## 2.2. Cài đặt nodejs và nodered => Dùng làm backend 
 
@@ -72,4 +73,14 @@ Tạo thư mục chứa website tại D:\Apache24\Apache24\phuonganhnguyet
 *Bước 3: Cài đặt Node red thành Windows Service
 
 - Mở CMD, run as administrator sau đó trỏ đến thư mục: D:\nodejs\nodered
-- Chạy lệnh nssm.exe install a1-nodered "D:\nodejs\nodered\run-nodered.cmd" để chạy servide
+- Chạy lệnh nssm.exe install a1-nodered "D:\nodejs\nodered\run-nodered.cmd" để chạy servide a1-nodered
+- Chạy lệnh nssm start a1-nodered
+
+<img width="993" height="351" alt="image" src="https://github.com/user-attachments/assets/c6a7409f-142e-46f1-9327-bb97f59182e7" />
+
+- Sau khi cài đặt xong, node red sẽ hoạt động ở http://localhost:1880
+
+<img width="1920" height="1074" alt="image" src="https://github.com/user-attachments/assets/6048251c-6659-4b66-942f-5429a23f80a3" />
+
+## 2.3. Tạo CSDL tuỳ ý trên mssql (SQL Server 2022)
+Thiết kế CSDL chứa các thông tin về sản phẩm quần áo thu đông trên hệ thống 
