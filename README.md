@@ -1,10 +1,85 @@
 # BT2.WEB_APACHE
+## Phương Thị Ánh Nguyệt-K225480106098
+## YÊU CẦU:
+## NỘI DUNG BÀI TẬP:
+2.1. Cài đặt Apache web server:
+- Vô hiệu hoá IIS: nếu iis đang chạy thì mở cmd quyền admin để chạy lệnh: iisreset /stop
+- Download apache server, giải nén ra ổ D, cấu hình các file:
+  + D:\Apache24\conf\httpd.conf
+  + D:Apache24\conf\extra\httpd-vhosts.conf
+  để tạo website với domain: fullname.com
+  code web sẽ đặt tại thư mục: `D:\Apache24\fullname` (fullname ko dấu, liền nhau)
+- sử dụng file `c:\WINDOWS\SYSTEM32\Drivers\etc\hosts` để fake ip 127.0.0.1 cho domain này. Ví dụ sv tên là: `Đỗ Duy Cốp` thì tạo website với domain là fullname ko dấu, liền nhau: `doduycop.com`
+- thao tác dòng lệnh trên file `D:\Apache24\bin\httpd.exe` với các tham số `-k install` và `-k start` để cài đặt và khởi động web server apache.
+  
+2.2. Cài đặt nodejs và nodered => Dùng làm backend:
+- Cài đặt nodejs:
+  + download file `https://nodejs.org/dist/v20.19.5/node-v20.19.5-x64.msi`  (đây ko phải bản mới nhất, nhưng ổn định)
+  + cài đặt vào thư mục `D:\nodejs`
+- Cài đặt nodered:
+  + chạy cmd, vào thư mục `D:\nodejs`, chạy lệnh `npm install -g --unsafe-perm node-red --prefix "D:\nodejs\nodered"`
+  + download file: https://nssm.cc/release/nssm-2.24.zip
+    giải nén được file nssm.exe
+    copy nssm.exe vào thư mục `D:\nodejs\nodered\`
+  + tạo file "D:\nodejs\nodered\run-nodered.cmd" với nội dung (5 dòng sau):
+`@echo off
+REM fix path
+set PATH=D:\nodejs;%PATH%
+REM Run Node-RED
+node "D:\nodejs\nodered\node_modules\node-red\red.js" -u "D:\nodejs\nodered\work" %*`
+  + mở cmd, chuyển đến thư mục: `D:\nodejs\nodered`
+  + cài đặt service `a1-nodered` bằng lệnh: nssm.exe install a1-nodered "D:\nodejs\nodered\run-nodered.cmd"
+  + chạy service `a1-nodered` bằng lệnh: `nssm start a1-nodered`
+    
+2.3. Tạo csdl tuỳ ý trên mssql (sql server 2022), nhớ các thông số kết nối: ip, port, username, password, db_name, table_name
+    
+2.4. Cài đặt thư viện trên nodered:
+- truy cập giao diện nodered bằng url: http://localhost:1880
+- cài đặt các thư viện: node-red-contrib-mssql-plus, node-red-node-mysql, node-red-contrib-telegrambot, node-red-contrib-moment, node-red-contrib-influxdb, node-red-contrib-duckdns, node-red-contrib-cron-plus
+- Sửa file `D:\nodejs\nodered\work\settings.js` : 
+  tìm đến chỗ adminAuth, bỏ comment # ở đầu dòng (8 dòng), thay chuỗi mã hoá mật khẩu bằng chuỗi mới
+    adminAuth: {
+        type: "credentials",
+        users: [{
+            username: "admin",
+            password: "chuỗi_mã_hoá_mật_khẩu",
+            permissions: "*"
+        }]
+    },   
+   với mã hoá mật khẩu có thể thiết lập bằng tool: https://tms.tnut.edu.vn/pw.php
+- chạy lại nodered bằng cách: mở cmd, vào thư mục `D:\nodejs\nodered` và chạy lệnh `nssm restart a1-nodered`
+  khi đó nodered sẽ yêu cầu nhập mật khẩu mới vào được giao diện cho admin tại: http://localhost:1880
+  
+2.5. tạo api back-end bằng nodered:
+- tại flow1 trên nodered, sử dụng node `http in` và `http response` để tạo api
+- thêm node `MSSQL` để truy vấn tới cơ sở dữ liệu
+- logic flow sẽ gồm 4 node theo thứ tự sau (thứ tự nối dây): 
+  1. http in  : dùng GET cho đơn giản, URL đặt tuỳ ý, ví dụ: /timkiem
+  2. function : để tiền xử lý dữ liệu gửi đến
+  3. MSSQL: để truy vấn dữ liệu tới CSDL, nhận tham số từ node tiền xử lý
+  4. http response: để phản hồi dữ liệu về client: Status Code=200, Header add : Content-Type = application/json
+  có thể thêm node `debug` để quan sát giá trị trung gian.
+- test api thông qua trình duyệt, ví dụ: http://localhost:1880/timkiem?q=thị
+  
+2.6. Tạo giao diện front-end:
+- html form gồm các file : index.html, fullname.js, fullname.css
+  cả 3 file này đặt trong thư mục: `D:\Apache24\fullname`
+  nhớ thay fullname là tên của bạn, viết liền, ko dấu, chữ thường, vd tên là Đỗ Duy Cốp thì fullname là `doduycop`
+  khi đó 3 file sẽ là: index.html, doduycop.js và doduycop.css
+- index.html và fullname.css: trang trí tuỳ ý, có dấu ấn cá nhân, có form nhập được thông tin.
+- fullname.js: lấy dữ liệu trên form, gửi đến api nodered đã làm ở bước 2.5, nhận về json, dùng json trả về để tạo giao diện phù hợp với kết quả truy vấn của bạn.
+
+2.7. Nhận xét bài làm của mình:
+- đã hiểu quá trình cài đặt các phần mềm và các thư viện như nào?
+- đã hiểu cách sử dụng nodered để tạo api back-end như nào?
+- đã hiểu cách frond-end tương tác với back-end ra sao?
+
 ## 2.1. Cài đặt Apache web server:
 ### Bước 1: Kiểm tra IIS 
 - Mục đích của vô hiệu hoá IIS là để tránh xung cổng 80 giữa IIS và Apache
 - Nhấn `Start -> gõ " cmd " -> chọn "Run as administrator"`
 ### Bước 2: Tải và cài Apache
-- Truy cập trang chính thức 
+- Truy cập trang chính thức `https://www.apachelounge.com/download/`
 ### Bước 3: Cấu hình Apache
 
 Để tạo website có domain: `phuonganhnguyet.com` ta phải tạo domain cục bộ:
@@ -14,7 +89,8 @@
 - Mở file `D:\Apache\Apache24\conf\httpd.conf` rồi thực hiện:
 - Sửa đường link gốc:
 
-<img width="878" height="654" alt="image" src="https://github.com/user-attachments/assets/10bc76f0-6431-4fcb-a1cb-367fbabb2702" />
+<img width="933" height="251" alt="image" src="https://github.com/user-attachments/assets/a0e93c63-2480-413f-b11d-1acb57922341" />
+
 
 - Kích hoạt file Virtual Hosts: Tìm dòng `#Include conf/extra/httpd-vhosts.conf` và bỏ dấu # ở đầu dòng.
 
@@ -23,9 +99,10 @@
 - Mở file `D:\Apache\Apache24\conf\extra\httpd-vhosts.conf`
 - Đổi tên server:
 
-<img width="726" height="236" alt="image" src="https://github.com/user-attachments/assets/74b0df01-f6fb-4400-84a4-817983c000c3" />
+<img width="966" height="479" alt="image" src="https://github.com/user-attachments/assets/aa6bdfa6-59a1-45d4-870f-17c0db684c67" />
 
-*Tạo thư mục chứa website tại `D:\Apache24\Apache24\phuonganhnguyet`*
+
+**Tạo thư mục chứa website tại `D:\Apache24\Apache24\phuonganhnguyet`**
 
 - Tạo 1 file inder trong thư mục này
 
@@ -55,14 +132,14 @@
 - Sau khi download về máy, cài đặt nodejs vào thư mục `D:\nodejs`
 
 #### Cài đặt Node-Red
-*Bước 1: Mở CMD quyền Administrator*
+**Bước 1: Mở CMD quyền Administrator**
 
 - Trỏ vào thư mục `D:\nodejs`
 - Chạy lệnh: `npm install -g --unsafe-perm node-red --prefix "D:\nodejs\nodered"` để cài đặt Node-Red
 
 <img width="1016" height="225" alt="image" src="https://github.com/user-attachments/assets/8d6c752d-d575-477e-849f-3f23cdbffa4f" />
 
-*Bước 2: Cài đặt NSSM*
+**Bước 2: Cài đặt NSSM**
 
 - Truy cập vào `https://nssm.cc/release/nssm-2.24.zip` để download file. Sau đó giải nén và được file nssm.exe
 - Copy file  `nssm.exe` vào thư mục `D:\nodejs\nodered`
@@ -72,7 +149,7 @@
 
 <img width="1237" height="676" alt="image" src="https://github.com/user-attachments/assets/d1de0fb2-9447-4050-a228-780a65b2c4fc" />
 
-Bước 3: Cài đặt Node red thành Windows Service
+**Bước 3: Cài đặt Node red thành Windows Service**
 
 - Mở CMD, run as administrator sau đó trỏ đến thư mục: `D:\nodejs\nodered`
 - Chạy lệnh `nssm.exe install a1-nodered "D:\nodejs\nodered\run-nodered.cmd"` để chạy servide `a1-nodered`
@@ -118,12 +195,13 @@ Cài các thư viện sau:
   - Mở file cấu hình settings.js: `D:\nodejs\nodered\work\settings.js`
   - Tìm đến chỗ adminAuth, bỏ // ở đầu dòng (8 dòng) và thay chuỗi mã hóa mật khẩu bằng chuỗi mới:
 
-
-  HÌNH ẢNH
+<img width="932" height="214" alt="image" src="https://github.com/user-attachments/assets/324054f6-c231-44c3-a068-0a4f80db588a" />
 
 - Mã hoá mật khẩu có thể thiết lập bằng tool: `https://tms.tnut.edu.vn/pw.php`
 - Chạy lại nodered bằng cách: mở cmd, vào thư mục: `D:\nodejs\nodered` và chạy lệnh: `nssm restart a1-nodered`
-  HÌNH ẢNH
+  
+<img width="1228" height="256" alt="image" src="https://github.com/user-attachments/assets/e731d4a1-893e-40a3-8467-b31e67f5db7c" />
+
   
 - khi đó nodered sẽ yêu cầu nhập mật khẩu mới vào được giao diện cho admin tại: `http://localhost:1880`
 
@@ -137,30 +215,40 @@ Cài các thư viện sau:
 - Thêm node `MSSQL` để truy vấn tới cơ sở dữ liệu
 - Logic flow sẽ gồm 4 node theo thứ tự sau (thứ tự nối dây):
   
-*1.http in: dùng GET cho đơn giản:*
+**1.http in: dùng GET cho đơn giản:**
 
 <img width="385" height="359" alt="httpin" src="https://github.com/user-attachments/assets/ffa84047-042a-4153-b10b-5173033c1b90" />
 
-*2.Function: để tiền xử lý dữ liệu gửi đến:*
+**2.Function: để tiền xử lý dữ liệu gửi đến:**
 
 <img width="480" height="313" alt="Capture" src="https://github.com/user-attachments/assets/3eb0eb33-927d-4b20-b2a3-8111d1d8dea8" />
 
-*3.MSSQL: để truy vấn dữ liệu CSDL, nhận tham số từ node tiền xử:*
+**3.MSSQL: để truy vấn dữ liệu CSDL, nhận tham số từ node tiền xử:**
 
 <img width="392" height="383" alt="ad" src="https://github.com/user-attachments/assets/9dccdbfb-e7fe-4309-a291-12d4d6170acd" />
 
-*4.*
+**4.**
 
 <img width="400" height="293" alt="Capture PNGh" src="https://github.com/user-attachments/assets/83b58e81-c169-4c9c-a374-51c567b12511" />
 
-*5: Kết quả*
+**5: Kết quả**
 
 <img width="1919" height="885" alt="image" src="https://github.com/user-attachments/assets/d9e617c8-b61b-48ac-a46c-8005fc3b77bb" />
 
-*Kiểm tra API tìm kiếm sản phẩm thông qua trình duyệt*
+**Kiểm tra API tìm kiếm sản phẩm thông qua trình duyệt**
 
 - Ví dụ:http://localhost:1880/timkiem?q=
 <img width="1801" height="974" alt="image" src="https://github.com/user-attachments/assets/ae8fb214-67c7-4aa1-ad53-9811f9fcf093" />
+
+#### 2.6. Tạo giao diện front-end
+**HTML gồm các file: `index.html`, `phuonganhnguyet.css`, `phuonganhnguyet.js`. Tất cả đều nằm trong thư mục `D:\Apache\Apache24\phuonganhnguyet`**
+<img width="959" height="313" alt="image" src="https://github.com/user-attachments/assets/1606c3eb-bae7-47f8-9f32-70bde69f2acd" />
+
+**Giao diện chạy demo:**
+<img width="960" height="503" alt="qq" src="https://github.com/user-attachments/assets/f9e3068c-2c9b-4f08-b29e-27883f167adc" />
+**Giao diện khi tìm kiếm sản phẩm:**
+<img width="954" height="510" alt="háhá" src="https://github.com/user-attachments/assets/e0740bb2-e24a-49eb-b32e-a5899a8ea0fa" />
+#### 2.7. Tự đánh giá bài làm cá nhân.
 
 
 
