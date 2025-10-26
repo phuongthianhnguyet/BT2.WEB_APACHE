@@ -238,15 +238,15 @@ node "D:\nodejs\nodered\node_modules\node-red\red.js" -u "D:\nodejs\nodered\work
 - Thêm node `MSSQL` để truy vấn tới cơ sở dữ liệu
 - Logic flow sẽ gồm 4 node theo thứ tự sau (thứ tự nối dây):
   
-****1.http in: dùng GET cho đơn giản:****
+****1. http in: dùng GET cho đơn giản:****
 
 <img width="385" height="359" alt="httpin" src="https://github.com/user-attachments/assets/ffa84047-042a-4153-b10b-5173033c1b90" />
 
-****2.Function: để tiền xử lý dữ liệu gửi đến:****
+****2. Function: để tiền xử lý dữ liệu gửi đến:****
 
 <img width="480" height="313" alt="Capture" src="https://github.com/user-attachments/assets/3eb0eb33-927d-4b20-b2a3-8111d1d8dea8" />
 
-****3.MSSQL: để truy vấn dữ liệu CSDL, nhận tham số từ node tiền xử:****
+****3. MSSQL: để truy vấn dữ liệu CSDL, nhận tham số từ node tiền xử:****
 
 <img width="392" height="383" alt="ad" src="https://github.com/user-attachments/assets/9dccdbfb-e7fe-4309-a291-12d4d6170acd" />
 
@@ -254,7 +254,7 @@ node "D:\nodejs\nodered\node_modules\node-red\red.js" -u "D:\nodejs\nodered\work
 
 <img width="400" height="293" alt="Capture PNGh" src="https://github.com/user-attachments/assets/83b58e81-c169-4c9c-a374-51c567b12511" />
 
-****5: Kết quả****
+****5. Kết quả****
 
 <img width="1919" height="885" alt="image" src="https://github.com/user-attachments/assets/d9e617c8-b61b-48ac-a46c-8005fc3b77bb" />
 
@@ -292,3 +292,7 @@ node "D:\nodejs\nodered\node_modules\node-red\red.js" -u "D:\nodejs\nodered\work
 Front-end (HTML, CSS, JavaScript) gửi yêu cầu đến API Node-RED thông qua lệnh fetch, nhận dữ liệu trả về dạng JSON, rồi hiển thị kết quả lên giao diện. Vì vậy, em hiểu được quy trình trao đổi dữ liệu giữa giao diện người dùng và máy chủ trong một ứng dụng web.
 
 - Trong cả quá trình làm bài em cũng bị mắc ở nhiều chỗ, phải xoá đi cài lại 3 lần vì không tìm ra lỗi, nhưng khi tìm được ra lỗi thì lại là những cái sai rất không đáng vì nó quá đơn giản. Qua mỗi bài tập em lại rút ra được nhiều kinh nghiệm hơn so với trước đó, có kĩ năng trình bày, cẩn thận hơn.
+
+
+
+****THE END****
